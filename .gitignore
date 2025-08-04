@@ -1,0 +1,28 @@
+# node_modules for both client and server
+client/node_modules/
+server/node_modules/
+
+# build output (from Vite and any future builds)
+client/dist/
+server/build/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# dotenv files
+client/.env
+server/.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Cache
+.cache/
+*.cache
