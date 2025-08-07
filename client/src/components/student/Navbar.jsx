@@ -28,7 +28,7 @@ const Navbar = () => {
                 <button className='text-gray-700 hover:text-blue-500'>Become Educator</button>
                 {/* <Link to="/become-educator" className='text-gray-700 hover:text-blue-500'>Become Educator</Link> */}
               </li>
-              <li>|</li>
+              |
               <li>
                 <Link to="/myenrollments" className='text-gray-700 hover:text-blue-500'>MyEnrollments</Link>
               </li>
