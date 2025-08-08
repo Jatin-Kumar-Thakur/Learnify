@@ -43,6 +43,29 @@ import profile_img2 from './profile_img2.png'
 import profile_img3 from './profile_img3.png'
 import lesson_icon from './lesson_icon.svg'
 
+export const companies = [
+    {
+        name: 'Microsoft',
+        file: microsoft_logo,
+    },
+    {
+        name: 'Walmart',
+        file: walmart_logo,
+    },
+    {
+        name: 'Accenture',
+        file: accenture_logo,
+    },
+    {
+        name: 'Adobe',
+        file: adobe_logo,
+    },
+    {
+        name: 'Paypal',
+        file: paypal_logo,
+    }
+];
+
 
 export const assets = {
     logo,
