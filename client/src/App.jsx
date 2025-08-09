@@ -19,7 +19,7 @@ import Navbar from './components/student/Navbar.jsx'
 const App = () => {
   const isEducator = useMatch('/educator/*');
   return (
-    <div className='text-default bg-white min-h-screen'>
+    <div className='text-default bg-white min-h-screen '>
       {!isEducator && <Navbar />}
       <Routes>
         <Route path='/' element={<Home />} />

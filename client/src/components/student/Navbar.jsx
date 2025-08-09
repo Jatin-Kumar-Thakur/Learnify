@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { assets } from '../../assets/assets.js';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
+import { AppContext } from '../../context/AppContext.jsx';
 
 const Navbar = () => {
   const location = useLocation();
   const isCourseListPage = location.pathname.includes('/course-list');
+  const { isEducator ,setIsEducator } = useContext(AppContext);
 
   const { openSignIn } = useClerk();
   const { user } = useUser();
+  
+
+  
 
   return (
     <div className={`border-b-2 border-gray-200 h-[60px] flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-28 ${isCourseListPage ? 'bg-white' : 'bg-cyan-100/70'}`}>
@@ -25,7 +30,13 @@ const Navbar = () => {
           {
             user ? <>
               <li>
-                <button className='text-gray-700 hover:text-blue-500'>Become Educator</button>
+                {
+                  isEducator ? 
+                  <Link to="/educator" className='text-gray-700 hover:text-blue-500'>Dashboard</Link>
+                  :
+                  <button className='text-gray-700 hover:text-blue-500'>Become Educator</button>
+
+                }
                 {/* <Link to="/become-educator" className='text-gray-700 hover:text-blue-500'>Become Educator</Link> */}
               </li>
               |
