@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { dummyCourses } from "../assets/assets";
+import { dummyCourses, dummyTestimonial } from "../assets/assets";
 
 export const AppContext = createContext();
 
@@ -8,13 +8,20 @@ export const AppContextProvider = (props) => {
     // all States
     const [allCourses, setAllCourses] = useState([]);
     const [isEducator, setIsEducator] = useState(true);
+    const [allTestimonials, setAllTestimonials] = useState([]);
 
 
     const fetchCourses = () => {
         setAllCourses(dummyCourses);
     }
+    const fetchTestimonials = () => {
+        // This function would typically fetch testimonials from an API
+        // For now, we will use dummy data
+        setAllTestimonials(dummyTestimonial);
+    }
     useEffect(() => {
         fetchCourses();
+        fetchTestimonials();
     }, []);
 
     const averageRating = (ratings) => {
@@ -40,6 +47,7 @@ export const AppContextProvider = (props) => {
         averageRating,
         isEducator,
         setIsEducator,
+        allTestimonials,
     }
     return (
         <AppContext.Provider value={value}>
