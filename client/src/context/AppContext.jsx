@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { dummyCourses, dummyTestimonial } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 export const AppContext = createContext();
 
@@ -9,6 +10,7 @@ export const AppContextProvider = (props) => {
     const [allCourses, setAllCourses] = useState([]);
     const [isEducator, setIsEducator] = useState(true);
     const [allTestimonials, setAllTestimonials] = useState([]);
+    const navigate = useNavigate();
 
 
     const fetchCourses = () => {
@@ -48,6 +50,7 @@ export const AppContextProvider = (props) => {
         isEducator,
         setIsEducator,
         allTestimonials,
+        navigate
     }
     return (
         <AppContext.Provider value={value}>
