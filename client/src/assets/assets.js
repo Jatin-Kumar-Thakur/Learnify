@@ -114,7 +114,7 @@ export const assets = {
     lesson_icon
 }
 
-export const dummyEducatorData = {
+export const dummyEducatorData = [{
     "_id": "675ac1512100b91a6d9b8b24",
     "name": "GreatStack",
     "email": "user.greatstack@gmail.com",
@@ -122,7 +122,7 @@ export const dummyEducatorData = {
     "createdAt": "2024-12-12T10:56:17.930Z",
     "updatedAt": "2024-12-12T10:56:17.930Z",
     "__v": 0
-}
+}]
 
 export const dummyTestimonial = [
     {
@@ -235,10 +235,10 @@ export const dummyStudentEnrolled = [
 ]
 
 export const dummyCourses = [
-    {   
+    {
         "_id": "605c72efb3f1c2b1f8e4e1a1",
         "courseTitle": "Introduction to JavaScript",
-        "courseDescription": "<h2>Learn the Basics of JavaScript</h2><p>JavaScript is a versatile programming language that powers the web. In this course, you will learn the fundamentals of JavaScript, including syntax, data types, and control structures.</p><p>This course is perfect for beginners who want to start their journey in web development. By the end of this course, you will be able to create interactive web pages and understand the core concepts of JavaScript.</p><ul><li>Understand the basics of programming</li><li>Learn how to manipulate the DOM</li><li>Create dynamic web applications</li></ul>",
+        "courseDescription": "Learn the Basics of JavaScript JavaScript is a versatile programming language that powers the web. In this course, you will learn the fundamentals of JavaScript, including syntax, data types, and control structures.This course is perfect for beginners who want to start their journey in web development. By the end of this course, you will be able to create interactive web pages and understand the core concepts of JavaScript.Understand the basics of programmingLearn how to manipulate the DOM Create dynamic web applications.",
         "coursePrice": 49.99,
         "isPublished": true,
         "discount": 20,
