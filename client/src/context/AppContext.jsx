@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { dummyCourses, dummyEducatorData, dummyTestimonial } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import humanizeDuration from "humanize-duration";
 
 export const AppContext = createContext();
 
@@ -43,9 +44,33 @@ export const AppContextProvider = (props) => {
         return (total / ratings.length).toFixed(1);
     }
 
+    const calculcateChapterDuration = (chapter) => {
+        let time = 0;
+        chapter.chapterContent.map((lecture) => time += lecture.lectureDuration);
+        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+    }
+
+    const calculcateCourseDuration = (course) => {
+        let time = 0;
+        course.courseContent.map((chapter) => {
+            chapter.chapterContent.map((lecture) => time += lecture.lectureDuration);
+        })
+        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+    }
+
+    const calculateNumberOfLectures = (course) => {
+        let count = 0;
+        course.courseContent.forEach((chapter) => {
+            if (Array.isArray(chapter.chapterContent)) {
+                count += chapter.chapterContent.length;
+            }
+        });
+        return count;
+    }
+
     const educatorNameByEducatorId = (educatorId) => {
         const educatorData = educator.find(ed => ed._id === educatorId);
-        return educatorData ? educatorData.name : 'Unknown Educator';   
+        return educatorData ? educatorData.name : 'Unknown Educator';
     }
 
 
@@ -63,7 +88,11 @@ export const AppContextProvider = (props) => {
         setIsEducator,
         allTestimonials,
         navigate,
-        educatorNameByEducatorId
+        educatorNameByEducatorId,
+        calculcateChapterDuration,
+        calculateNumberOfLectures,
+        calculcateCourseDuration
+
     }
     return (
         <AppContext.Provider value={value}>
