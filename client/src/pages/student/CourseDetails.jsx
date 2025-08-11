@@ -93,7 +93,7 @@ const CourseDetails = () => {
                       <p>{chapter?.chapterContent.length} {chapter?.chapterContent.length > 1 ? "lectures" : "lecture"}-{calculcateChapterDuration(chapter)}</p>
                     </div>
                   </div>
-                  <div className={`py-3 pr-5 pl-2 border border-gray-300 transition-all duration-300 ${openSection[index] ? 'max-h-96 py-0 block' : 'max-h-0 hidden'}`}>
+                  <div className={` overflow-hidden py-3 pr-5 pl-2 border border-gray-300 transition-all duration-300 ${openSection[index] ? 'max-h-96' : 'max-h-0 py-0'}`}>
                     {
                       chapter?.chapterContent?.map((lecture, lectureIndex) => (
                         <div className="flex items-center justify-between" key={lectureIndex}>
