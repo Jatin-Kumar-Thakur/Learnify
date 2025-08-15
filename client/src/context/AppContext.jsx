@@ -12,6 +12,7 @@ export const AppContextProvider = (props) => {
     const [educator, setEducator] = useState([]);
     const [isEducator, setIsEducator] = useState(true);
     const [allTestimonials, setAllTestimonials] = useState([]);
+    const [enrolledCourses, setEnrolledCourses] = useState([]);
     const navigate = useNavigate();
 
 
@@ -28,10 +29,15 @@ export const AppContextProvider = (props) => {
         // For now, we will use dummy data
         setAllTestimonials(dummyTestimonial);
     }
+
+    const fetchAllEnrolledCourses = async () => {
+        setEnrolledCourses(dummyCourses);
+    }
     useEffect(() => {
         fetchCourses();
         fetchTestimonials();
         fetchEducator();
+        fetchAllEnrolledCourses();
     }, []);
 
     const averageRating = (ratings) => {
@@ -91,7 +97,10 @@ export const AppContextProvider = (props) => {
         educatorNameByEducatorId,
         calculcateChapterDuration,
         calculateNumberOfLectures,
-        calculcateCourseDuration
+        calculcateCourseDuration,
+        fetchAllEnrolledCourses,
+        enrolledCourses,
+        setEnrolledCourses,
 
     }
     return (
