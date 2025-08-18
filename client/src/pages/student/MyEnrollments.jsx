@@ -58,7 +58,7 @@ function MyEnrollments() {
                   </td>
                   <td className='px-4 py-3 max-sm:text-right'>
                     {
-                      <button className='bg-blue-600 border px-4 py-2 text-white' onClick={() => navigate('/player' + course?._id)}>
+                      <button className='bg-blue-600 border px-4 py-2 text-white' onClick={() => navigate('/player/' + course?._id)}>
                         {
                           progressArray[index] &&
                             progressArray[index].lectureCompleted == progressArray[index].totalLecture ? "Completed" : "Ongoing"
