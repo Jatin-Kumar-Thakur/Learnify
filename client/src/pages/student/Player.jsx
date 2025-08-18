@@ -5,6 +5,7 @@ import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
 import YouTube from 'react-youtube';
 import Footer from '../../components/student/Footer';
+import Rating from '../../components/student/Rating';
 
 const Player = () => {
   const [course, setCourse] = useState(null);
@@ -76,7 +77,8 @@ const Player = () => {
             }
           </div>
           <div className="flex items-center gap-2 py-3 mt-10">
-            <div className="text-xl font-bold">Rate this Course</div>
+            <h1 className="text-xl font-bold">Rate this Course : </h1>
+            <Rating intialRating={0} />
           </div>
         </div>
         <div className="">
