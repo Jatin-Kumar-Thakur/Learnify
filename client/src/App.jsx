@@ -13,7 +13,6 @@ import MyCourses from './pages/educator/MyCourses.jsx'
 import StudentEnrolled from './pages/educator/StudentEnrolled.jsx'
 
 import Navbar from './components/student/Navbar.jsx'
-// import EducatorNavbar from './components/educator/Navbar.jsx'
 
 
 const App = () => {
