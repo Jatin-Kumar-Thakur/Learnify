@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { dummyCourses, dummyEducatorData, dummyTestimonial } from "../assets/assets";
+import { dummyCourses, dummyEducatorData, dummyTestimonial ,dummyStudentEnrolled } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
 
@@ -13,6 +13,7 @@ export const AppContextProvider = (props) => {
     const [isEducator, setIsEducator] = useState(true);
     const [allTestimonials, setAllTestimonials] = useState([]);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [enrolledStudents, setEnrolledStudents] = useState([]);
     const navigate = useNavigate();
 
 
@@ -33,11 +34,16 @@ export const AppContextProvider = (props) => {
     const fetchAllEnrolledCourses = async () => {
         setEnrolledCourses(dummyCourses);
     }
+
+    const fetchAllEnrolledStudents = async () => {
+        setEnrolledStudents(dummyStudentEnrolled);
+    }
     useEffect(() => {
         fetchCourses();
         fetchTestimonials();
         fetchEducator();
         fetchAllEnrolledCourses();
+        fetchAllEnrolledStudents();
     }, []);
 
     const averageRating = (ratings) => {
@@ -101,6 +107,8 @@ export const AppContextProvider = (props) => {
         fetchAllEnrolledCourses,
         enrolledCourses,
         setEnrolledCourses,
+        enrolledStudents,
+        setEnrolledStudents,
 
     }
     return (
