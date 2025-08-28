@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import dbConnection from './configs/db.js';
+import { clerkWebhooks } from './controllers/webhooks.js';
 
 //Initialize express
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.send("Home route")
 })
+app.post('/clerk', express.json(clerkWebhooks))
 
 
 //PORT
