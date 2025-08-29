@@ -2,7 +2,6 @@ import { Link } from "react-router-dom"
 import { assets } from "../../assets/assets";
 
 const TestimonialCard = ({ testimonial }) => {
-    console.log(testimonial);
     return (
         <div>
             <div className='border rounded-lg overflow-hidden shadow-[0px_4px_15px_0px] shadow-black/5'>

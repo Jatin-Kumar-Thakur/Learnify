@@ -12,7 +12,7 @@ const TestimonialsSection = () => {
         <div className="grid grid-cols-auto px-4 gap-4 md:px-0 md:my-16 my-10">
           {
             allTestimonials?.slice(0, 3).map((data, index) => (
-              <TestimonialCard  testimonial={data} />
+              <TestimonialCard  testimonial={data} key={index}/>
             ))
           }
         </div>

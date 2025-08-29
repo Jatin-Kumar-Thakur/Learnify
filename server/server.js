@@ -3,30 +3,33 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import dbConnection from './configs/db.js';
 import { clerkWebhooks } from './controllers/webhooks.js';
+import { clerkMiddleware, requireAuth } from "@clerk/express";
+import educatorRoute from './routes/educatorRoute.js';
 
-//Initialize express
-const app = express();
 dotenv.config();
 
+const app = express();
 
-//DB connect
+// Apply Clerk middleware before any route that uses authentication
+app.use(express.json());
+app.use(clerkMiddleware());
+
+// Database connection
 await dbConnection();
 
-//Middleware
+// Allow cross-origin requests
 app.use(cors());
 
+// Routes
+app.get("/", (req, res) => res.send("Home route"));
 
-//Routes
-app.get('/', (req, res) => {
-    res.send("Home route")
-})
-// app.post('/clerk', express.json(clerkWebhooks))
-app.post("/clerk", express.raw({ type: "application/json" }), clerkWebhooks);
+// Webhook route — no authentication needed
+app.post("/clerk", clerkWebhooks);
 
+// Protect educator routes with Clerk authentication
+app.use("/api/educator", requireAuth(), educatorRoute);
 
-//PORT
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-    console.log("Server is Running on port ", PORT);
-})
+    console.log("Server is Running on port", PORT);
+});
