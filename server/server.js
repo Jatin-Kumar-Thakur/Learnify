@@ -5,6 +5,9 @@ import dbConnection from './configs/db.js';
 import { clerkWebhooks } from './controllers/webhooks.js';
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import educatorRoute from './routes/educatorRoute.js';
+import connectCloudinary from './configs/cloudinary.js';
+import { protectEducator } from './middleware/authMiddleware.js';
+import courseRoute from './routes/courseRoute.js';
 
 dotenv.config();
 
@@ -16,6 +19,7 @@ app.use(clerkMiddleware());
 
 // Database connection
 await dbConnection();
+await connectCloudinary();
 
 // Allow cross-origin requests
 app.use(cors());
@@ -26,8 +30,9 @@ app.get("/", (req, res) => res.send("Home route"));
 // Webhook route — no authentication needed
 app.post("/clerk", clerkWebhooks);
 
-// Protect educator routes with Clerk authentication
+//Other Routes
 app.use("/api/educator", requireAuth(), educatorRoute);
+app.use("/api/course", courseRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
