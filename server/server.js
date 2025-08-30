@@ -13,7 +13,15 @@ import userRoute from './routes/userRoute.js';
 dotenv.config();
 
 const app = express();
-app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks)
+app.post(
+    "/stripe",
+    express.raw({ type: "application/json" }),
+    (req, res, next) => {
+        console.log("⚡ Stripe webhook hit");
+        next();
+    },
+    stripeWebhooks
+);
 
 // Apply Clerk middleware before any route that uses authentication
 app.use(express.json());
