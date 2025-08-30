@@ -35,7 +35,7 @@ app.post("/clerk", clerkWebhooks);
 app.use("/api/educator", requireAuth(), educatorRoute);
 app.use("/api/course", courseRoute);
 app.use("/api/user", userRoute);
-app.post("/stripe",express.raw({type:'application/json'}) , stripeWebhooks)
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
