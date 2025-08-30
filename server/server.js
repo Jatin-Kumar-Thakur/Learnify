@@ -13,6 +13,7 @@ import userRoute from './routes/userRoute.js';
 dotenv.config();
 
 const app = express();
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks)
 
 // Apply Clerk middleware before any route that uses authentication
 app.use(express.json());
@@ -35,7 +36,6 @@ app.post("/clerk", clerkWebhooks);
 app.use("/api/educator", requireAuth(), educatorRoute);
 app.use("/api/course", courseRoute);
 app.use("/api/user", userRoute);
-app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
