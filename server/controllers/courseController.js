@@ -33,4 +33,3 @@ export const getCourseById = async (req, res) => {
     }
 }
 
-

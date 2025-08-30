@@ -2,12 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import dbConnection from './configs/db.js';
-import { clerkWebhooks } from './controllers/webhooks.js';
+import { clerkWebhooks, stripeWebhooks } from './controllers/webhooks.js';
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import educatorRoute from './routes/educatorRoute.js';
 import connectCloudinary from './configs/cloudinary.js';
 import { protectEducator } from './middleware/authMiddleware.js';
 import courseRoute from './routes/courseRoute.js';
+import userRoute from './routes/userRoute.js';
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.post("/clerk", clerkWebhooks);
 //Other Routes
 app.use("/api/educator", requireAuth(), educatorRoute);
 app.use("/api/course", courseRoute);
+app.use("/api/user", userRoute);
+app.post("/stripe",express.raw({type:'application/json'}) , stripeWebhooks)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
