@@ -3,6 +3,9 @@ import { dummyCourses, dummyEducatorData, dummyTestimonial, dummyStudentEnrolled
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
 import { useAuth, useUser } from '@clerk/clerk-react'
+import axios from 'axios';
+import { toast } from "react-toastify";
+
 
 export const AppContext = createContext();
 
@@ -11,19 +14,55 @@ export const AppContextProvider = (props) => {
     // all States
     const [allCourses, setAllCourses] = useState([]);
     const [educator, setEducator] = useState([]);
-    const [isEducator, setIsEducator] = useState(true);
+    const [isEducator, setIsEducator] = useState(false);
     const [allTestimonials, setAllTestimonials] = useState([]);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [enrolledStudents, setEnrolledStudents] = useState([]);
+    const [userData, setUserData] = useState(null);
+
     const navigate = useNavigate();
 
     //
     const { getToken } = useAuth();
     const { user } = useUser();
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
 
+    const fetchUserData = async () => {
 
-    const fetchCourses = () => {
-        setAllCourses(dummyCourses);
+        if (user.publicMetadata.role === 'educator') {
+            setIsEducator(true);
+        }
+        try {
+            const token = await getToken();
+            const { data } = await axios.get(backend_url + '/api/user/data', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            if (data.success) {
+                setUserData(data.user);
+            }
+            else {
+                toast.error(data.message);
+            }
+
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
+    const fetchCourses = async () => {
+        try {
+            const { data } = await axios.get(backend_url + '/api/course/all');
+            if (data.success) {
+                setAllCourses(data.courses)
+            }
+            else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
     const fetchEducator = () => {
         // This function would typically fetch educator data from an API
@@ -37,7 +76,25 @@ export const AppContextProvider = (props) => {
     }
 
     const fetchAllEnrolledCourses = async () => {
-        setEnrolledCourses(dummyCourses);
+        // setEnrolledCourses(dummyCourses);
+        try {
+            const token = await getToken();
+            const { data } = await axios.get(backend_url + '/api/user/enrolled-courses', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            if (data.success) {
+                const enrollCourses=data.enrolledCourses;
+                setEnrolledCourses(data.enrolledCourses.reverse())
+            }
+            else {
+                toast.error(data.message);
+            }
+
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
 
     const fetchAllEnrolledStudents = async () => {
@@ -47,7 +104,6 @@ export const AppContextProvider = (props) => {
         fetchCourses();
         fetchTestimonials();
         fetchEducator();
-        fetchAllEnrolledCourses();
         fetchAllEnrolledStudents();
     }, []);
 
@@ -58,6 +114,8 @@ export const AppContextProvider = (props) => {
     useEffect(() => {
         if (user) {
             logToken();
+            fetchUserData();
+            fetchAllEnrolledCourses();
         }
     }, [user]);
 
@@ -68,7 +126,7 @@ export const AppContextProvider = (props) => {
             total += ratingObj?.rating;
         });
 
-        return (total / ratings.length).toFixed(1);
+        return Math.floor((total / ratings.length).toFixed(1));
     }
 
     const calculcateChapterDuration = (chapter) => {
@@ -79,17 +137,17 @@ export const AppContextProvider = (props) => {
 
     const calculcateCourseDuration = (course) => {
         let time = 0;
-        course.courseContent.map((chapter) => {
-            chapter.chapterContent.map((lecture) => time += lecture.lectureDuration);
+        course?.courseContent?.map((chapter) => {
+            chapter?.chapterContent?.map((lecture) => time += lecture.lectureDuration);
         })
         return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
     }
 
     const calculateNumberOfLectures = (course) => {
         let count = 0;
-        course.courseContent.forEach((chapter) => {
-            if (Array.isArray(chapter.chapterContent)) {
-                count += chapter.chapterContent.length;
+        course?.courseContent?.forEach((chapter) => {
+            if (Array.isArray(chapter?.chapterContent)) {
+                count += chapter?.chapterContent?.length;
             }
         });
         return count;
@@ -124,6 +182,13 @@ export const AppContextProvider = (props) => {
         setEnrolledCourses,
         enrolledStudents,
         setEnrolledStudents,
+        userData,
+        setUserData,
+        fetchUserData,
+        backend_url,
+        getToken,
+        fetchCourses
+
 
     }
     return (

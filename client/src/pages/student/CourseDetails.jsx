@@ -6,6 +6,8 @@ import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
 import YouTube from 'react-youtube';
 import Loading from '../../components/student/Loading';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -17,6 +19,9 @@ const CourseDetails = () => {
     calculcateCourseDuration,
     calculcateChapterDuration,
     currency,
+    backend_url,
+    userData,
+    getToken
   } = useContext(AppContext);
   const [course, setCourse] = useState(null);
   const [educatorName, setEducatorName] = useState(null);
@@ -27,16 +32,53 @@ const CourseDetails = () => {
   const [playerData, setPlayerData] = useState(null);
 
 
-  const getCourseById = (id) => {
-    const data = allCourses.find(course => course._id == id);
-    console.log("Course Data:", data);
-    setCourse(data);
+  const getCourseById = async () => {
+    try {
+      const { data } = await axios.get(backend_url + '/api/course/' + id);
+      if (data.success) {
+        setCourse(data.courseData);
+      }
+      else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  const enrollCourse = async () => {
+    try {
+      if (!userData) {
+        toast.warn("Please login to enroll the course");
+        return;
+      }
+      if (isEnrolled) {
+        toast.info("You are already enrolled in this course");
+        return;
+      }
+      const token = await getToken();
+      const { data } = await axios.post(backend_url + '/api/user/purchase', { courseId: course?._id }, { headers: { Authorization: `Bearer ${token}` } });
+      if (data.success) {
+        const { success_url } = data;
+        toast.success(data.message);
+        window.location.replace(success_url);
+        setIsEnrolled(true);
+      }
+      else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
   useEffect(() => {
-    if (id) {
-      getCourseById(id);
+    getCourseById();
+  }, []);
+  useEffect(() => {
+    if (userData && course) {
+      setIsEnrolled(userData.enrolledCourses.includes(course._id) ? true : false);
     }
-  }, [id, allCourses]);
+  }, [userData, course]);
+
   useEffect(() => {
     if (course?.educator) {
       const name = educatorNameByEducatorId(course?.educator);
@@ -79,27 +121,27 @@ const CourseDetails = () => {
                         ))
                       }
                     </div>
-                    <p className='pl-1 text-gray-500 '>( {course?.courseRatings.length} {course?.courseRatings.length > 1 ? `ratings` : `rating`} )</p>
+                    <p className='pl-1 text-gray-500 '>( {course?.courseRatings?.length} {course?.courseRatings?.length > 1 ? `ratings` : `rating`} )</p>
                   </div>
-                  <p className='text-gray-500 mt-1'>Course by <span className='text-blue-600 underline'>{educatorName}</span></p>
+                  <p className='text-gray-500 mt-1'>Course by <span className='text-blue-600 underline'>{course?.educator?.name}</span></p>
                 </div>
                 <div className="mt-5">
                   <div className="">
                     <h1 className='font-semibold text-xl'>Course Structure</h1>
-                    <p className='text-gray-500'>{course?.courseContent.length} sections - {totalLectures} lectures - {courseDuration}</p>
+                    <p className='text-gray-500'>{course?.courseContent?.length} sections - {totalLectures} lectures - {courseDuration}</p>
                   </div>
                 </div>
                 <div className="">
                   {
                     course?.courseContent?.map((chapter, index) => (
-                      <>
+                      <div key={index}>
                         <div className="flex items-center justify-between border border-gray-300 px-2 md:px-5 py-2  bg-gray-100 gap-2 md:gap-5" key={index}>
                           <div className="flex items-center gap-2 md:gap-5 cursor-pointer" onClick={() => toggleSection(index)}>
                             <img src={assets.down_arrow_icon} alt="down_arrow" className={`w-3 transform transition-transform ${openSection[index] ? 'rotate-180' : ''}`} />
                             <h1 className='font-semibold text-sm md:text-lg whitespace-nowrap overflow-hidden text-ellipsis'>{chapter.chapterTitle}</h1>
                           </div>
                           <div className="">
-                            <p>{chapter?.chapterContent.length} {chapter?.chapterContent.length > 1 ? "lectures" : "lecture"}-{calculcateChapterDuration(chapter)}</p>
+                            <p>{chapter?.chapterContent?.length} {chapter?.chapterContent?.length > 1 ? "lectures" : "lecture"}-{calculcateChapterDuration(chapter)}</p>
                           </div>
                         </div>
                         <div className={`overflow-hidden pr-5 pl-2 border border-gray-300 transition-all duration-300 ${openSection[index] ? 'max-h-96 py-3' : 'max-h-0'}`}>
@@ -123,7 +165,7 @@ const CourseDetails = () => {
                           }
                         </div>
 
-                      </>
+                      </div>
                     ))
                   }
 
@@ -170,7 +212,7 @@ const CourseDetails = () => {
                         </div>
                       </div>
                     </div>
-                    <button className='bg-blue-600 text-white w-full py-3 rounded-lg'>{isEnrolled ? "Already Enrolled" : "Enroll Now"}</button>
+                    <button onClick={enrollCourse} className='bg-blue-600 text-white w-full py-3 rounded-lg'>{isEnrolled ? "Already Enrolled" : "Enroll Now"}</button>
                     <div className="">
                       <h1 className='font-medium text-lg'>What's in the course?</h1>
                       <ul className='list-disc pl-5 text-gray-500 mt-2 text-sm'>

@@ -20,7 +20,7 @@ export const getUserData = async (req, res) => {
 export const getEnrolledCourses = async (req, res) => {
     try {
         const userId = req.auth.userId;
-        const userData = await User.findById(userId);
+        const userData = await User.findById(userId).populate("enrolledCourses");;
 
         if (!userData) {
             return res.status(404).json({ success: false, message: "User not found." });
@@ -117,6 +117,7 @@ export const getUserCourseProgress = async (req, res) => {
         const userId = req.auth.userId;
         const { courseId } = req.body;
         const progressData = await CourseProgress.findOne({ userId, courseId });
+        console.log("here ",progressData)
         if (!progressData) {
             res.json({ success: false, message: "course progress not available" });
         }

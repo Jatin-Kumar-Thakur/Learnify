@@ -3,17 +3,42 @@ import { Link, useLocation } from 'react-router-dom';
 import { assets } from '../../assets/assets.js';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
 import { AppContext } from '../../context/AppContext.jsx';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Navbar = () => {
   const location = useLocation();
   const isCourseListPage = location.pathname.includes('/course-list');
-  const { isEducator ,setIsEducator } = useContext(AppContext);
+  const { isEducator, setIsEducator, getToken, backend_url, navigate } = useContext(AppContext);
 
   const { openSignIn } = useClerk();
   const { user } = useUser();
-  
 
-  
+  const becomeEducator = async () => {
+    try {
+      if (isEducator) {
+        navigate('/educator');
+        return;
+      }
+      const token = await getToken();
+      const { data } = await axios(backend_url + '/api/educator/update-role', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (data.success) {
+        setIsEducator(true);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+
+
 
   return (
     <div className={`border-b-2 border-gray-200 h-[60px] flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-28 ${isCourseListPage ? 'bg-white' : 'bg-cyan-100/70'}`}>
@@ -31,10 +56,10 @@ const Navbar = () => {
             user ? <>
               <li>
                 {
-                  isEducator ? 
-                  <Link to="/educator" className='text-gray-700 hover:text-blue-500'>Dashboard</Link>
-                  :
-                  <button className='text-gray-700 hover:text-blue-500'>Become Educator</button>
+                  isEducator ?
+                    <Link to="/educator" className='text-gray-700 hover:text-blue-500'>Dashboard</Link>
+                    :
+                    <button onClick={becomeEducator} className='text-gray-700 hover:text-blue-500'>Become Educator</button>
 
                 }
                 {/* <Link to="/become-educator" className='text-gray-700 hover:text-blue-500'>Become Educator</Link> */}
@@ -60,7 +85,7 @@ const Navbar = () => {
           {
             user ? <>
               {/* <li>
-                <button className='text-gray-700 hover:text-blue-500'>Become Educator</button>
+                <button onClick={becomeEducator} className='text-gray-700 hover:text-blue-500'>Become Educator</button>
               </li>
               <li>|</li>
               <li>
