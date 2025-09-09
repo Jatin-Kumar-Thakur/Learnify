@@ -3,7 +3,7 @@ import { dummyCourses, dummyEducatorData, dummyTestimonial, dummyStudentEnrolled
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
 import { useAuth, useUser } from '@clerk/clerk-react'
-import axios from 'axios';
+import axios, { all } from 'axios';
 import { toast } from "react-toastify";
 
 
@@ -55,6 +55,7 @@ export const AppContextProvider = (props) => {
         try {
             const { data } = await axios.get(backend_url + '/api/course/all');
             if (data.success) {
+
                 setAllCourses(data.courses)
             }
             else {

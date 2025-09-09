@@ -2,6 +2,7 @@ import { clerkClient } from '@clerk/express'
 import Course from '../models/courseModel.js';
 import { v2 as cloudinary } from 'cloudinary';
 import { Purchase } from '../models/PurchaseModel.js';
+import { User } from '../models/userModel.js';
 
 export const updateRoleToEducator = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ export const addNewCourse = async (req, res) => {
         const educatorId = req.auth.userId;
 
         if (!imageFile) {
-            return res.status(404).json({ status: false, message: "Thumbnail file is not available." })
+            return res.status(404).json({ success: false, message: "Thumbnail file is not available." })
         }
         const parsedCourseData = await JSON.parse(courseData);
         parsedCourseData.educator = educatorId;
@@ -43,7 +44,7 @@ export const addNewCourse = async (req, res) => {
         newCourse.courseThumbnail = imageUpload.secure_url;
         await newCourse.save()
 
-        return res.status(201).json({ status: true, message: "Course is uploaded" });
+        return res.status(201).json({ success: true, message: "Course is uploaded" });
 
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

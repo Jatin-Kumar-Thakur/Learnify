@@ -1,11 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Quill from 'quill'
 import uniqid from 'uniqid'
 import { assets } from '../../assets/assets';
+import { AppContext } from '../../context/AppContext.jsx';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const AddCourse = () => {
   const quillRef = useRef(null);
   const editorRef = useRef(null);
+  const { backend_url, getToken } = useContext(AppContext);
 
 
   const [courseTitle, setCourseTitle] = useState('');
@@ -94,7 +98,44 @@ const AddCourse = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      if (!image) {
+        toast.error("Please upload a thumbnail image");
+        return;
+      }
+      const courseData = {
+        courseTitle,
+        courseDescription: quillRef.current.root.innerHTML,
+        coursePrice: Number(coursePrice),
+        discount: Number(discount),
+        courseContent: chapter,
+      }
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('courseData', JSON.stringify(courseData));
+      const token = await getToken();
+      const { data } = await axios.post(backend_url + '/api/educator/add-course', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (data?.success) {
+        toast.success(data.message);
+        setCourseTitle('');
+        setCoursePrice(0);
+        setDiscount(0);
+        setImage(null);
+        setChapter([]);
+        quillRef.current.root.innerHTML = '';
+      }
+      else {
+        toast.error(data.message);
+      }
+
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
 
   useEffect(() => {
@@ -217,7 +258,7 @@ const AddCourse = () => {
             </div>
           }
         </div>
-        <button className='w-full bg-blue-400 text-white px-4 py-2 rounded' type='submit'>Add</button>
+        <button className='w-full bg-blue-400 text-white px-4 py-2 rounded' onClick={handleSubmit} type='submit'>Add</button>
       </form>
     </div>
   )

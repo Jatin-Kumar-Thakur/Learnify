@@ -10,7 +10,7 @@ const CourseSection = () => {
     <div className='flex flex-col items-center pt-6 pb-16 px-8 md:px-20 w-full text-base text-center gap-2'>
       <h2 className='font-medium text-3xl'>Learn from the best</h2>
       <p className='text-gray-500 text-sm md:text-base mt-3'>Discover our top-rated courses across various categories. From coding and design to <br /> business and wellness, our courses are crafted to deliver results.</p>
-      <div className="grid grid-cols-auto px-4 gap-4 md:px-0 md:my-16 my-10">
+      <div className="grid grid-cols-auto gap-6 w-full">
         {
           allCourses.slice(0, 4).map((course, index) => (
             <CourseCard key={index} props={course} />

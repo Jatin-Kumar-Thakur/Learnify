@@ -7,8 +7,8 @@ const CourseCard = ({ props }) => {
   const { currency, averageRating } = useContext(AppContext);
 
   return (
-    <Link to={'/course/' + props?._id} onClick={() => scrollTo(0, 0)} className='border rounded-lg overflow-hidden '>
-      <img src={props?.courseThumbnail} alt="course_image" className='w-full' />
+    <Link to={'/course/' + props?._id} onClick={() => scrollTo(0, 0)} className='border rounded-lg overflow-hidden cursor-pointer'>
+      <img src={props?.courseThumbnail} alt="course_image" className='w-full aspect-[16/10] overflow-hidden' />
       <div className='text-left p-3'>
         <h1 className='font-semibold text-xl'>{props?.courseTitle}</h1>
         <p className='text-md text-gray-500'>{props?.educator?.name}</p>

@@ -181,7 +181,7 @@ const CourseDetails = () => {
                         opts={{ playerVars: { autoplay: 1 } }} iframeClassName="w-full aspect-video" />
                       :
 
-                      <img src={course?.courseThumbnail} alt="" />
+                      <img src={course?.courseThumbnail} alt="" className='w-full aspect-[16/10] overflow-hidden'/>
                   }
                   <div className="px-4 my-5 flex flex-col gap-5">
 
