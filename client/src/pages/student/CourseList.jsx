@@ -33,7 +33,7 @@ const CourseList = () => {
   return (
     <>
       <div className=' px-10 md:px-32 py-10'>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col justify-between items-start pb-2 sm:flex-row sm:items-center sm:pb-0">
           <h1 className='font-semibold text-2xl'>Course List</h1>
           <SearchBar data={input} />
         </div>

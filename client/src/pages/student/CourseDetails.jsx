@@ -111,17 +111,17 @@ const CourseDetails = () => {
                 <p className='text-md text-gray-500'>{course?.courseDescription}</p>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <p>{averageRating(course?.courseRatings)}</p>
+                    <p>{averageRating(course?.courseRating)}</p>
                     <div className="flex items-center ml-2 text-sm">
                       {
                         [...Array(5)].map((_, index) => (
                           <span key={index} className={`text-yellow-500 ${index < 4 ? 'text-yellow-500' : 'text-gray-300'}`}>
-                            <img src={index < Math.floor(averageRating(course?.courseRatings)) ? assets.star : assets.star_blank} alt="star" className=' w-[14px]' />
+                            <img src={index < Math.floor(averageRating(course?.courseRating)) ? assets.star : assets.star_blank} alt="star" className=' w-[14px]' />
                           </span>
                         ))
                       }
                     </div>
-                    <p className='pl-1 text-gray-500 '>( {course?.courseRatings?.length} {course?.courseRatings?.length > 1 ? `ratings` : `rating`} )</p>
+                    <p className='pl-1 text-gray-500 '>( {course?.courseRating?.length} {course?.courseRating?.length > 1 ? `ratings` : `rating`} )</p>
                   </div>
                   <p className='text-gray-500 mt-1'>Course by <span className='text-blue-600 underline'>{course?.educator?.name}</span></p>
                 </div>
@@ -135,7 +135,7 @@ const CourseDetails = () => {
                   {
                     course?.courseContent?.map((chapter, index) => (
                       <div key={index}>
-                        <div className="flex items-center justify-between border border-gray-300 px-2 md:px-5 py-2  bg-gray-100 gap-2 md:gap-5" key={index}>
+                        <div className="flex flex-col md:flex-row md:items-center items-start justify-between border border-gray-300 px-2 md:px-5 py-2  bg-gray-100 gap-2 md:gap-5" key={index}>
                           <div className="flex items-center gap-2 md:gap-5 cursor-pointer" onClick={() => toggleSection(index)}>
                             <img src={assets.down_arrow_icon} alt="down_arrow" className={`w-3 transform transition-transform ${openSection[index] ? 'rotate-180' : ''}`} />
                             <h1 className='font-semibold text-sm md:text-lg whitespace-nowrap overflow-hidden text-ellipsis'>{chapter.chapterTitle}</h1>
@@ -147,7 +147,7 @@ const CourseDetails = () => {
                         <div className={`overflow-hidden pr-5 pl-2 border border-gray-300 transition-all duration-300 ${openSection[index] ? 'max-h-96 py-3' : 'max-h-0'}`}>
                           {
                             chapter?.chapterContent?.map((lecture, lectureIndex) => (
-                              <div className="flex items-center justify-between" key={lectureIndex}>
+                              <div className="flex flex-col md:flex-row md:items-center items-start justify-between" key={lectureIndex}>
                                 <div className="flex items-center gap-3 md:p-2 py-2 cursor-pointer">
                                   <img src={assets.play_icon} alt="play_icon" />
                                   <p className='whitespace-nowrap overflow-hidden text-ellipsis'>{lecture.lectureTitle}</p>
@@ -181,7 +181,7 @@ const CourseDetails = () => {
                         opts={{ playerVars: { autoplay: 1 } }} iframeClassName="w-full aspect-video" />
                       :
 
-                      <img src={course?.courseThumbnail} alt="" className='w-full aspect-[16/10] overflow-hidden'/>
+                      <img src={course?.courseThumbnail} alt="" className='w-full aspect-[16/10] overflow-hidden' />
                   }
                   <div className="px-4 my-5 flex flex-col gap-5">
 
@@ -191,7 +191,7 @@ const CourseDetails = () => {
                         <p className='text-red-500'><span className='font-medium'>5 Days</span> left at this price!</p>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <p className='textt-gray-800 md:text-4xl text-2xl font-semibold'>{currency} {(course?.coursePrice - course?.discount * course?.coursePrice / 100).toFixed(2)}</p>
+                        <p className='textt-gray-800 lg:text-3xl text-2xl font-semibold'>{currency} {(course?.coursePrice - course?.discount * course?.coursePrice / 100).toFixed(2)}</p>
                         <p className='md:text-lg text-gray-500 line-through'>{currency} {course?.coursePrice}</p>
                         <p className='md:text-lg text-gray-500'>{course?.discount}% off</p>
                       </div>
@@ -199,7 +199,7 @@ const CourseDetails = () => {
                       <div className="flex items-center text-gray-500 gap-3 text-sm">
                         <div className="flex  items-center gap-1">
                           <img src={assets.star} alt="star" className='max-w-course-card' />
-                          <p>{averageRating(course?.courseRatings)}</p>
+                          <p>{averageRating(course?.courseRating)}</p>
                         </div>
                         <div className="h-4 w-px bg-gray-500/40"></div>
                         <div className="flex items-center gap-1">

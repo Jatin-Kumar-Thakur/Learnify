@@ -147,9 +147,8 @@ export const addUserRating = async (req, res) => {
         }
 
 
-        const isRated = course.courseRating.findIndex((i) => {
-            i.userId === userId
-        })
+
+        const isRated = course.courseRating.findIndex(i => i.userId === userId);
         if (isRated > -1) {
             course.courseRating[isRated].rating = rating;
         }

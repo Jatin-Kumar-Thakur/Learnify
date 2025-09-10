@@ -11,7 +11,7 @@ import axios from 'axios';
 import Loading from '../../components/student/Loading';
 
 const Player = () => {
-  const { enrolledCourses, calculcateChapterDuration, backend_url, getToken, userData, fetchAllEnrolledCourses } = useContext(AppContext);
+  const { enrolledCourses, calculcateChapterDuration, backend_url, getToken, userData, fetchAllEnrolledCourses ,fetchCourses} = useContext(AppContext);
   const [course, setCourse] = useState(null);
   const [openSection, setOpenSection] = useState({});
   const [playerData, setPlayerData] = useState(null);
@@ -95,6 +95,7 @@ const Player = () => {
       if (data.success) {
         toast.success(data.message);
         fetchAllEnrolledCourses();
+        fetchCourses();
       }
       else {
         toast.error(data.message);
