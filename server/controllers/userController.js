@@ -69,7 +69,7 @@ export const purchaseCourse = async (req, res) => {
             quantity: 1
         }]
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `${origin}/loading/my-enrollments`,
+            success_url: `${origin}/loading/myenrollments`,
             cancel_url: `${origin}`,
             line_items: line_items,
             mode: 'payment',
@@ -77,7 +77,14 @@ export const purchaseCourse = async (req, res) => {
                 purchaseId: newPurchase._id.toString()
             }
         });
-
+        let progress = await CourseProgress.findOne({ userId, courseId });
+        if (!progress) {
+            await CourseProgress.create({
+                userId,
+                courseId,
+                lectureCompleted: []  // start empty
+            });
+        }
         res.status(200).json({ success: true, success_url: session.url })
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
